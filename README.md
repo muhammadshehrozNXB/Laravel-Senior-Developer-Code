@@ -116,7 +116,7 @@ To run the tests, use the following command:
     
 API Documentation
 
-The API endpoints are documented using Swagger or OpenAPI specification. You can view the full API documentation by navigating to the following URL after starting the application:
+The API endpoints are documented using Swagger specification. You can view the full API documentation by navigating to the following URL after starting the application:
 
     http://localhost:8000/api/documentation
 
