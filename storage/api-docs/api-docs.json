@@ -1,0 +1,550 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "APIs For Translations",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/translations": {
+            "post": {
+                "tags": [
+                    "Translations"
+                ],
+                "summary": "Store a new translation",
+                "description": "Store a new translation for a given meta_key and key.",
+                "operationId": "fe38d8cf02ff5c92d2cd8d5dfb095e5f",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "": {
+                                        "properties": {
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "type": "string"
+                                            },
+                                            "password": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "language_id",
+                                    "meta_key": "greetings",
+                                    "content": "[1,2,3]"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "language_id": {
+                                                    "type": "string",
+                                                    "example": "1"
+                                                },
+                                                "meta_key": {
+                                                    "type": "string",
+                                                    "example": "greetings"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "text"
+                                                },
+                                                "tags": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "number",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "name"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "message": {
+                                                    "properties": {
+                                                        "language_id": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string",
+                                                                "example": "The language id field is required."
+                                                            },
+                                                            "collectionFormat": "multi"
+                                                        },
+                                                        "meta_key": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string",
+                                                                "example": "The meta key field is required."
+                                                            },
+                                                            "collectionFormat": "multi"
+                                                        },
+                                                        "content": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string",
+                                                                "example": "The contentfield is required."
+                                                            },
+                                                            "collectionFormat": "multi"
+                                                        },
+                                                        "tags": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string",
+                                                                "example": "The tags field must be an array."
+                                                            },
+                                                            "collectionFormat": "multi"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/translations/id": {
+            "get": {
+                "tags": [
+                    "Translations"
+                ],
+                "summary": "Get translation detail",
+                "description": "Get translation using id.",
+                "operationId": "70a6a1f5ed2c1832516c6456ca461a9a",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "language_id": {
+                                                    "type": "string",
+                                                    "example": "1"
+                                                },
+                                                "meta_key": {
+                                                    "type": "string",
+                                                    "example": "greetings"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "text"
+                                                },
+                                                "tags": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "number",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "name"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Translations"
+                ],
+                "summary": "update a new translation",
+                "description": "update a new translation for a given meta_key and key.",
+                "operationId": "16d24ab7f89a9ca32f87b7744f2d874b",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "": {
+                                        "properties": {
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "type": "string"
+                                            },
+                                            "password": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object",
+                                "example": {
+                                    "name": "language_id",
+                                    "meta_key": "greetings",
+                                    "content": "[1,2,3]"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "language_id": {
+                                                    "type": "string",
+                                                    "example": "1"
+                                                },
+                                                "meta_key": {
+                                                    "type": "string",
+                                                    "example": "greetings"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "text"
+                                                },
+                                                "tags": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "number",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "name"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "errors": {
+                                            "properties": {
+                                                "message": {
+                                                    "properties": {
+                                                        "language_id": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string",
+                                                                "example": "The language id field is required."
+                                                            },
+                                                            "collectionFormat": "multi"
+                                                        },
+                                                        "meta_key": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string",
+                                                                "example": "The meta key field is required."
+                                                            },
+                                                            "collectionFormat": "multi"
+                                                        },
+                                                        "content": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string",
+                                                                "example": "The contentfield is required."
+                                                            },
+                                                            "collectionFormat": "multi"
+                                                        },
+                                                        "tags": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "string",
+                                                                "example": "The tags field must be an array."
+                                                            },
+                                                            "collectionFormat": "multi"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Translations"
+                ],
+                "summary": "Delete translation",
+                "description": "Delete translation",
+                "operationId": "9fe22ccde27928e7a9f4fb4aa658d175",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "path",
+                        "description": "Translation id",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Deleted Successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/translations-export": {
+            "get": {
+                "tags": [
+                    "Translations"
+                ],
+                "summary": "Get all translations",
+                "description": "Get all translations",
+                "operationId": "524a957db3e6b2a6b26f7efe2520c9b1",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "path",
+                        "description": "if page parameter is not added it will be default 1",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "language_id": {
+                                                    "type": "string",
+                                                    "example": "1"
+                                                },
+                                                "meta_key": {
+                                                    "type": "string",
+                                                    "example": "greetings"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "text"
+                                                },
+                                                "tags": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "number",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "name"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/translations-search": {
+            "get": {
+                "tags": [
+                    "Translations"
+                ],
+                "summary": "Search translation by meta_key or tag",
+                "description": "Search translation by meta_key or tag",
+                "operationId": "b861d1e84c30943e4f05992af17a6416",
+                "parameters": [
+                    {
+                        "name": "meta_key",
+                        "in": "path",
+                        "description": "If the search query is based on a <strong>meta_key</strong>, the search will be filtered by the <strong>meta_key</strong>.",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "greetings"
+                    },
+                    {
+                        "name": "tag",
+                        "in": "path",
+                        "description": "If the search query is based on a <strong>tag</strong>, the search will be filtered by the <strong>tag</strong>.",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "mobile"
+                    },
+                    {
+                        "name": "page",
+                        "in": "path",
+                        "description": "If page parameter is not added it will be default 1",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "language_id": {
+                                                    "type": "string",
+                                                    "example": "1"
+                                                },
+                                                "meta_key": {
+                                                    "type": "string",
+                                                    "example": "greetings"
+                                                },
+                                                "content": {
+                                                    "type": "string",
+                                                    "example": "text"
+                                                },
+                                                "tags": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "number",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "name"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "bearerAuth",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Translations",
+            "description": "Translations"
+        }
+    ]
+}
