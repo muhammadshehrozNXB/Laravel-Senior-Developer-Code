@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Resources\TranslationResource;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\StoreTranslationRequest;
+use App\Services\TranslationService;
+use Illuminate\Http\JsonResponse;
 
 /**
  * @OA\Info(
@@ -25,6 +27,15 @@ use App\Http\Requests\StoreTranslationRequest;
  */
 class TranslationController extends Controller
 {
+
+
+    protected $translationService;
+
+    public function __construct(TranslationService $translationService)
+    {
+        $this->translationService = $translationService;
+    }
+
     /**
      * @OA\Post(
      *     path="/api/translations",
@@ -111,16 +122,19 @@ class TranslationController extends Controller
      *      )
      * )
      */
-    public function store(StoreTranslationRequest $request)
+
+    /**
+     * Store a newly created translation.
+     *
+     * @param StoreTranslationRequest $request
+     * @return JsonResponse
+     */
+    public function store(StoreTranslationRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $translation = Translation::create($validated);
+        $tags = $request->tags;
 
-        if ($request->tags) {
-            $tags = Tag::find($request->tags);
-            $translation->tags()->attach($tags);
-        }
-
+        $translation = $this->translationService->store($validated, $tags);
         return response()->json(new TranslationResource($translation), 201);
     }
 
@@ -211,19 +225,23 @@ class TranslationController extends Controller
      *      )
      * )
      */
-    public function update(StoreTranslationRequest $request, $id)
+
+    /**
+     * Update the specified translation.
+     *
+     * @param StoreTranslationRequest $request
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function update(StoreTranslationRequest $request, int $id): JsonResponse
     {
         $validated = $request->validated();
 
         $translation = Translation::findOrFail($id);
-        $translation->update($validated);
 
-        if ($request->tags) {
-            $tags = Tag::find($request->tags);
-            $translation->tags()->sync($tags);
-        }
+        $updatedTranslation = $this->translationService->update($translation, $validated, $request->tags);
 
-        return response()->json(new TranslationResource($translation));
+        return response()->json(new TranslationResource($updatedTranslation));
     }
 
     /**
@@ -250,10 +268,17 @@ class TranslationController extends Controller
      *      ),
      * )
      */
-    public function show($id)
+
+    /**
+     * Display the specified translation.
+     *
+     * @param int $id
+     * @return JsonResponse
+     */
+    public function show(int $id): JsonResponse
     {
-        $translation = Translation::findOrFail($id);
-        return new TranslationResource($translation);
+        $translationResource = $this->translationService->getTranslationById($id);
+        return response()->json($translationResource);
     }
 
     /**
@@ -281,10 +306,15 @@ class TranslationController extends Controller
      *      ),
      * )
      */
-    public function destroy($id)
+    /**
+     * Remove the specified translation from storage.
+     *
+     * @param Translation $translation
+     * @return JsonResponse
+     */
+    public function destroy(Translation $translation): JsonResponse
     {
-        $translation = Translation::findOrFail($id);
-        $translation->delete();
+        $this->translationService->deleteTranslation($translation);
 
         return response()->json(["message" => "Deleted Successfully"], 204);
     }
@@ -323,15 +353,19 @@ class TranslationController extends Controller
      *      ),
      * )
      */
-    public function exportTranslations(Request $request)
+    /**
+     * Export translations with pagination and caching.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function exportTranslations(Request $request): JsonResponse
     {
         $page = $request->query('page', 1);
 
-        $translations = Cache::remember("page-{$page}", 4 * 60 * 60, function () {
-            return Translation::with('language')->paginate(900);
-        });
+        $translations = $this->translationService->getTranslationsWithCache($page);
 
-        return TranslationResource::collection($translations);
+        return response()->json(TranslationResource::collection($translations));
     }
 
     /**
@@ -386,25 +420,20 @@ class TranslationController extends Controller
      *      ),
      * )
      */
-    public function search(Request $request)
+    /**
+     * Search for translations with optional filters and pagination.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function search(Request $request): JsonResponse
     {
         $page = $request->query('page', 1);
-        $query = Translation::query();
+        $metaKey = $request->query('meta_key');
+        $tag = $request->query('tag');
 
-        if ($request->has('meta_key')) {
-            $query->where('meta_key', 'like', '%' . $request->meta_key . '%');
-        }
+        $translations = $this->translationService->searchTranslations($metaKey, $tag, $page);
 
-        if ($request->has('tag')) {
-            $query->whereHas('tags', function ($q) use ($request) {
-                $q->where('name', $request->tag);
-            });
-        }
-
-        $translations = Cache::remember("search-page-{$page}-meta_key-{$request->meta_key}-tag-{$request->tag}", 60 * 60, function () use ($query) {
-            return $query->paginate(800);
-        });
-
-        return TranslationResource::collection($translations);
+        return response()->json(TranslationResource::collection($translations));
     }
 }
